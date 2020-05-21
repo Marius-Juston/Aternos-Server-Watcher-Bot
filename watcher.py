@@ -34,7 +34,7 @@ async def server_status(channel_id):
     server_ip = os.getenv("SERVER_IP")
     url = f'https://{server_ip}/'
 
-    previous_status = 'Offline'
+    previous_status = None
     current_number_of_players = -1
 
     while not client.is_closed():
