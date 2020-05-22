@@ -40,23 +40,24 @@ async def server_status(channel_id):
     while not client.is_closed():
         with urlopen(url) as response:
             html_doc = response.read()
-            parser = BeautifulSoup(html_doc, 'html.parser')
-            status = get_status(parser)
 
-            if status != previous_status:
-                await channel.send(f"The server is now **{status}**")
-                previous_status = status
+        parser = BeautifulSoup(html_doc, 'html.parser')
+        status = get_status(parser)
 
-            if status == 'Online':
-                num, max_num = get_player_number(parser)
+        if status != previous_status:
+            await channel.send(f"The server is now **{status}**")
+            previous_status = status
 
-                if num != current_number_of_players:
-                    await channel.send(f"There are currently **{num}** players online")
+        if status == 'Online':
+            num, max_num = get_player_number(parser)
 
-                    current_number_of_players = num
+            if num != current_number_of_players:
+                await channel.send(f"There are currently **{num}** players online")
 
-            else:
-                current_number_of_players = -1
+                current_number_of_players = num
+
+        else:
+            current_number_of_players = -1
 
         await asyncio.sleep(60)  # task runs every 60 seconds
 
